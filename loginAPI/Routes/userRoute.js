@@ -40,4 +40,7 @@ userRoutes.route('/add').post( (req,res) => {
 userRoutes.route('/login').get( (req,res) => {
 
 });
+userRoutes.route('/update').put( (req,res) => {
+
+});
 module.exports = userRoutes;
