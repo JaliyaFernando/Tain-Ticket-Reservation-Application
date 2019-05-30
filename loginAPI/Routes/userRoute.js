@@ -24,17 +24,20 @@ userRoutes.route('/add').post( (req,res) => {
         }
 
         const newUser = new User();
-
         newUser.Email = Email;
         newUser.Password = newUser.generateHash(Password);
-
         newUser.save( (err, user) => {
             if(err){
                 return res.send({ message : 'Server error'});
             }
-
-            return res.send({message : 'Signed Up'});
+            return res.send({
+                message: 'Signed up'
+            });
         });
     });
+});
+
+userRoutes.route('/login').get( (req,res) => {
+
 });
 module.exports = userRoutes;
