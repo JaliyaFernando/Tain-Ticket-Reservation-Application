@@ -4,10 +4,10 @@ const User = require('../Models/User');
 
 
 userRoutes.route('/add').post( (req,res) => {
-    let user = new User(req.body);
     const {body} =req;
     let {
-        Email
+        Email,
+        Password
     } = body;
 
     User.find({
@@ -22,11 +22,19 @@ userRoutes.route('/add').post( (req,res) => {
                 message : 'Account is already exist'
             });
         }
-    })
-    user.save().then( user => {
-        res.status(200).send({message:'user added', data:user});
-    }).catch( err => {
-        res.status(400).send('Unable to insert the data');
+
+        const newUser = new User();
+
+        newUser.Email = Email;
+        newUser.Password = newUser.generateHash(Password);
+
+        newUser.save( (err, user) => {
+            if(err){
+                return res.send({ message : 'Server error'});
+            }
+
+            return res.send({message : 'Signed Up'});
+        });
     });
 });
 module.exports = userRoutes;
