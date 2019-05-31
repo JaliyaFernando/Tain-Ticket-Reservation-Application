@@ -6,16 +6,14 @@ export default class signin extends Component{
         super(props);
         this.onChangeEmail = this.onChangeEmail.bind(this);
         this.onChangePassword = this.onChangePassword.bind(this);
-        this.onChangeConfirmPassword = this.onChangeConfirmPassword.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
 
         this.state = {
             Email : '',
             Password : '',
-            ConfirmPassword : ''
+            message:''
         };
     }
-
     onChangeEmail(e){
         this.setState({
             Email : e.target.value
@@ -26,27 +24,16 @@ export default class signin extends Component{
             Password : e.target.value
         });
     }
-    onChangeConfirmPassword(e){
-        this.setState({
-            ConfirmPassword : e.target.value
-        });
-    }
     onSubmit(){
-        const obj = {
-            Email : this.state.Email,
-            Password : this.state.Password
-        };
-        axios.post('http://localhost:4000/user/add',obj)
-            .then( res => { console.log(res.data)});
-
+        axios.get('http://localhost:4000/user/login/'+this.state.Email+'/'+this.state.Password)
+            .then( res => { console.log(res.data.message)});
 
     }
     render() {
         return(
             <div>
                 <div className="container">
-                    <h1>Sign Up</h1>
-                    <p>Please fill in this form to create an account.</p>
+                    <h1>Sign In</h1>
                     <hr/>
                     <form onSubmit={this.onSubmit}>
                         <label htmlFor="email"><b>Email</b></label>
@@ -68,23 +55,9 @@ export default class signin extends Component{
                             onChange={this.onChangePassword}
                             required
                         />
-
-                        <label htmlFor="psw-repeat"><b>Confirm Password</b></label>
-                        <input
-                            type="password"
-                            placeholder="Repeat Password"
-                            name="psw-confirm"
-                            value={this.state.ConfirmPassword}
-                            onChange={this.onChangeConfirmPassword}
-                            required
-                        />
-
-                        <p>By creating an account you agree to our <a href="#1">Terms
-                            & Privacy</a>.</p>
-
                         <div className="clearfix">
                             <button type="reset" className="cancelbtn">Cancel</button>
-                            <button type="submit" className="signupbtn">Sign Up</button>
+                            <button type="submit" className="signupbtn">Sign In</button>
                         </div>
                     </form>
                 </div>
