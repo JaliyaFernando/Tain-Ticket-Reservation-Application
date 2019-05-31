@@ -1,10 +1,10 @@
 const express = require('express');
 const userRoutes = express.Router();
-const User = require('../Models/User');
+let User = require('../Models/User');
 
 
 userRoutes.route('/add').post( (req,res) => {
-    const {body} =req;
+    let {body} =req;
     let {
         Email,
         Password
@@ -22,7 +22,6 @@ userRoutes.route('/add').post( (req,res) => {
                 message : 'Account is already exist'
             });
         }
-
         const newUser = new User();
         newUser.Email = Email;
         newUser.Password = newUser.generateHash(Password);
@@ -37,8 +36,19 @@ userRoutes.route('/add').post( (req,res) => {
     });
 });
 
-userRoutes.route('/login').get( (req,res) => {
-
+userRoutes.route('/login/:Email/:Password').get( (req,res) => {
+    const user = new User();
+    let Email = req.params.Email;
+    let Password = req.params.Password
+    User.find({Email : Email, Password : user.validPassword(Password)}, (err,user) => {
+        if(err){
+            console.error(err);
+        }else if(user.length > 0){
+            res.status(200).send({message : 'Found'});
+        }else{
+            res.status(404).send({message: 'Not found'});
+        }
+    });
 });
 userRoutes.route('/update').put( (req,res) => {
 
